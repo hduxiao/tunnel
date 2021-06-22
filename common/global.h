@@ -1,11 +1,67 @@
 //
 // Created by maqian on 2018/6/15.
+// Modified by dxiao on 2021/6/22.
 //
 
-#ifndef LEARN_C_COMMON_H
-#define LEARN_C_COMMON_H
-
+#pragma once
 #include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+#include <string>
+
+const int BUFFERSIZE = 1024;
+
+static inline void clear_stdin()
+{
+	char c;
+	while ((c = getchar()) != '\n' && c != EOF);
+}
+
+static inline int input(int defaultVal)
+{
+	char inBuffer[BUFFERSIZE];
+
+	if (fgets(inBuffer, BUFFERSIZE, stdin) != nullptr)
+	{
+		char* const pNewLine = strchr(inBuffer, '\n');
+		if (pNewLine)
+			*pNewLine = 0;
+
+		if (strlen(inBuffer) == 0)
+		{
+			return defaultVal;
+		}
+		else
+		{
+			return atoi(inBuffer);
+		}
+	}
+
+	return -1;
+}
+
+static inline std::string input(std::string defaultVal)
+{
+	char inBuffer[BUFFERSIZE];
+
+	if (fgets(inBuffer, BUFFERSIZE, stdin) != nullptr)
+	{
+		char* const pNewLine = strchr(inBuffer, '\n');
+		if (pNewLine)
+			*pNewLine = 0;
+
+		if (strlen(inBuffer) == 0)
+		{
+			return defaultVal;
+		}
+		else
+		{
+			return std::string(inBuffer);
+		}
+}
+
+	return std::string();
+}
 
 #ifndef NULL
 #define NULL ((void *)0)
@@ -54,5 +110,3 @@ boolean memeq(void *p1, void *p2, int n);
 int enter(void *dest, size_t dest_size, char *def);
 
 void clear_stdin();
-
-#endif //LEARN_C_COMMON_H
