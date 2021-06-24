@@ -30,11 +30,26 @@ void close_socket(socket_t s)
 #endif
 }
 
-sockaddr_t create_sockaddr(const char* ip, int port)
+sockaddr_in create_sockaddr(const char* ip, int port)
 {
-	sockaddr_t addr;
+	sockaddr_in addr;
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(port);
 	addr.sin_addr.s_addr = inet_addr(ip);
 	return addr;
+}
+
+int set_socket_nonblock(socket_t s)
+{
+#ifdef _WIN32
+	u_long mode = 1;
+	return ioctlsocket(s, FIONBIO, &mode);
+#else
+	int mode = fcntl(s, F_GETFL, 0);
+	if (mode == SOCKET_ERROR)
+		return SOCKET_ERROR;
+	if (mode & O_NONBLOCK)
+		return 0;
+	return fcntl(s, F_SETFL, mode | O_NONBLOCK);
+#endif
 }
